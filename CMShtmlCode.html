@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            width: 450px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+            width: 80%;
+        }
+
+        button {
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .add-btn { background: #28a745; }
+        .sort-btn { background: #007bff; }
+        .search-btn { background: #6f42c1; }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #e3e3e3;
+            margin: 8px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Contact Management System</h2>
+
+    <input type="text" id="name" placeholder="Enter Name">
+
+    <input type="text" id="phone" placeholder="Enter 10 Digit Phone"
+           maxlength="10"
+           oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+    <br>
+    <button class="add-btn" onclick="addContact()">Add Contact</button>
+    <button class="sort-btn" onclick="sortContacts()">Sort A-Z</button>
+
+    <br><br>
+
+    <input type="text" id="searchName" placeholder="Search by Name">
+    <button class="search-btn" onclick="searchContact()">Search</button>
+
+    <ul id="contactList"></ul>
+</div>
+
+<script>
+    let contacts = [];
+
+    function addContact() {
+        let name = document.getElementById("name").value.trim();
+        let phone = document.getElementById("phone").value.trim();
+
+        if (name === "" || phone === "") {
+            alert("Please enter both name and phone number");
+            return;
+        }
+
+        if (phone.length !== 10) {
+            alert("Phone number must be exactly 10 digits");
+            return;
+        }
+
+        contacts.push({ name: name, phone: phone });
+        displayContacts();
+
+        document.getElementById("name").value = "";
+        document.getElementById("phone").value = "";
+    }
+
+    function displayContacts() {
+        let list = document.getElementById("contactList");
+        list.innerHTML = "";
+
+        for (let i = 0; i < contacts.length; i++) {
+            let li = document.createElement("li");
+            li.innerText = contacts[i].name + " - " + contacts[i].phone;
+            list.appendChild(li);
+        }
+    }
+
+    function searchContact() {
+        let searchName = document.getElementById("searchName").value.trim();
+        let found = false;
+
+        for (let i = 0; i < contacts.length; i++) {
+            if (contacts[i].name.toLowerCase() === searchName.toLowerCase()) {
+                alert("Found: " + contacts[i].name + " - " + contacts[i].phone);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            alert("Contact not found");
+        }
+    }
+
+    function sortContacts() {
+        contacts.sort(function(a, b) {
+            return a.name.localeCompare(b.name);
+        });
+        displayContacts();
+    }
+</script>
+
+</body>
+</html>
